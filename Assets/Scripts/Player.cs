@@ -7,9 +7,8 @@ public class Player : MonoBehaviour {
     [SerializeField] private float maxForwardAcceleration = 20;
     [SerializeField] private float maxSidewaysAcceleration = 5;
     [SerializeField] private float maxBackwardAcceleration = 1;
-
     [SerializeField] private float maxSpeed = 5;
-
+    [SerializeField] private float rotationRate = 180;
 
     public void Move(Vector2 targetVelocity) {
         Vector3 delta = (targetVelocity - _rigidbody.velocity)/Time.deltaTime;
@@ -24,8 +23,16 @@ public class Player : MonoBehaviour {
         _rigidbody.AddForce(delta/_rigidbody.mass, ForceMode2D.Force);
     }
 
+    public void Rotate(float rate) {
+        _rigidbody.rotation += rate*Time.deltaTime;
+    }
+
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    private void Update() {
+        Rotate(rotationRate*Input.GetAxis("Rotate"));
     }
 
     private void FixedUpdate() {
@@ -34,6 +41,7 @@ public class Player : MonoBehaviour {
             _rigidbody.velocity /= 2;
         }
         else {
+            motion = transform.TransformDirection(motion);
             Move(motion*maxSpeed);
         }
     }

@@ -433,6 +433,7 @@ MonoBehaviour:
   maxSidewaysAcceleration: 5
   maxBackwardAcceleration: 1
   maxSpeed: 5
+  rotationRate: 180
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
