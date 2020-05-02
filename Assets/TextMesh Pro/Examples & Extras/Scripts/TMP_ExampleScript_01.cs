@@ -1,32 +1,31 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using TMPro;
 
+namespace TMPro.Examples {
+    public class TMP_ExampleScript_01 : MonoBehaviour {
+        #region objectType enum
 
-namespace TMPro.Examples
-{
+        public enum objectType {
+            TextMeshPro = 0,
+            TextMeshProUGUI = 1
+        }
 
-    public class TMP_ExampleScript_01 : MonoBehaviour
-    {
-        public enum objectType { TextMeshPro = 0, TextMeshProUGUI = 1 };
-
-        public objectType ObjectType;
-        public bool isStatic;
-
-        private TMP_Text m_text;
+        #endregion
 
         //private TMP_InputField m_inputfield;
 
 
         private const string k_label = "The count is <#0080ff>{0}</color>";
         private int count;
+        public bool isStatic;
 
-        void Awake()
-        {
+        private TMP_Text m_text;
+
+        public objectType ObjectType;
+
+        private void Awake() {
             // Get a reference to the TMP text component if one already exists otherwise add one.
             // This example show the convenience of having both TMP components derive from TMP_Text. 
-            if (ObjectType == 0)
+            if(ObjectType == 0)
                 m_text = GetComponent<TextMeshPro>() ?? gameObject.AddComponent<TextMeshPro>();
             else
                 m_text = GetComponent<TextMeshProUGUI>() ?? gameObject.AddComponent<TextMeshProUGUI>();
@@ -51,14 +50,11 @@ namespace TMPro.Examples
         }
 
 
-        void Update()
-        {
-            if (!isStatic)
-            {
-                m_text.SetText(k_label, count % 1000);
+        private void Update() {
+            if(!isStatic) {
+                m_text.SetText(k_label, count%1000);
                 count += 1;
             }
         }
-
     }
 }

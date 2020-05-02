@@ -1,13 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-
-namespace TMPro.Examples
-{
-    
-    public class ObjectSpin : MonoBehaviour
-    {
-
+namespace TMPro.Examples {
+    public class ObjectSpin : MonoBehaviour {
 #pragma warning disable 0414
 
         public float SpinSpeed = 5;
@@ -21,11 +15,15 @@ namespace TMPro.Examples
         private Color32 m_lightColor;
         private int frames = 0;
 
-        public enum MotionType { Rotation, BackAndForth, Translation };
+        public enum MotionType {
+            Rotation,
+            BackAndForth,
+            Translation
+        }
+
         public MotionType Motion;
 
-        void Awake()
-        {
+        private void Awake() {
             m_transform = transform;
             m_initial_Rotation = m_transform.rotation.eulerAngles;
             m_initial_Position = m_transform.position;
@@ -36,22 +34,19 @@ namespace TMPro.Examples
 
 
         // Update is called once per frame
-        void Update()
-        {
-            if (Motion == MotionType.Rotation)
-            {
-                m_transform.Rotate(0, SpinSpeed * Time.deltaTime, 0);
+        private void Update() {
+            if(Motion == MotionType.Rotation) {
+                m_transform.Rotate(0, SpinSpeed*Time.deltaTime, 0);
             }
-            else if (Motion == MotionType.BackAndForth)
-            {
-                m_time += SpinSpeed * Time.deltaTime;
-                m_transform.rotation = Quaternion.Euler(m_initial_Rotation.x, Mathf.Sin(m_time) * RotationRange + m_initial_Rotation.y, m_initial_Rotation.z);
+            else if(Motion == MotionType.BackAndForth) {
+                m_time += SpinSpeed*Time.deltaTime;
+                m_transform.rotation = Quaternion.Euler(m_initial_Rotation.x,
+                    Mathf.Sin(m_time)*RotationRange + m_initial_Rotation.y, m_initial_Rotation.z);
             }
-            else
-            {
-                m_time += SpinSpeed * Time.deltaTime;
+            else {
+                m_time += SpinSpeed*Time.deltaTime;
 
-                float x = 15 * Mathf.Cos(m_time * .95f);
+                float x = 15*Mathf.Cos(m_time*.95f);
                 float y = 10; // *Mathf.Sin(m_time * 1f) * Mathf.Cos(m_time * 1f);
                 float z = 0f; // *Mathf.Sin(m_time * .9f);    
 
