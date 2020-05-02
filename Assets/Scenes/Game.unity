@@ -676,7 +676,11 @@ MonoBehaviour:
   maxAcceleration: 20
   maxSpeed: 1
   rotationRate: 90
-  maxAngularAcceleration: 720
+  missileSpeed: 15
+  attackRange: 6
+  minDistanceFromTarget: 3
+  maxDistanceFromTarget: 10
+  maxPrediction: 1
 --- !u!1 &1192544401
 GameObject:
   m_ObjectHideFlags: 0
