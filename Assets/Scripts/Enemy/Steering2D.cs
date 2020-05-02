@@ -131,6 +131,16 @@ namespace Enemy {
             return Flee(target, maxAcceleration);
         }
 
+        public Vector2 Wander(float wanderOffset, float wanderRadius, float wanderRate,
+            ref float wanderOrientation, float maxAcceleration) {
+            wanderOrientation += RandomBinomial()*wanderRate;
+            float targetOrientation = wanderOrientation + _rigidbody.rotation;
+            Vector2 target = _rigidbody.position + wanderOffset*(Vector2)_rigidbody.transform.up;
+            target += wanderRadius*new Vector2(-Mathf.Cos(targetOrientation*Mathf.Deg2Rad),
+                Mathf.Sin(targetOrientation*Mathf.Deg2Rad));
+            return Seek(target, maxAcceleration);
+        }
+
         #endregion
 
 
@@ -196,6 +206,10 @@ namespace Enemy {
 
         private void Awake() {
             _rigidbody = GetComponent<Rigidbody2D>();
+        }
+
+        private static float RandomBinomial() {
+            return Random.value - Random.value;
         }
     }
 }

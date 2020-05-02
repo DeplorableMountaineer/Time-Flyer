@@ -16,13 +16,14 @@ namespace Enemy {
         private float _lastShotTime = 0;
         private Transform _transform;
         private Collider2D _collider;
+        private float _wanderState = 0;
         private readonly RaycastHit2D[] _hits = new RaycastHit2D[32];
 
-        [SerializeField] private float maxAcceleration = 20;
-        [SerializeField] private float maxSpeed = 5;
-        [SerializeField] private float rotationRate = 90;
-        [SerializeField] private float missileSpeed = 15;
-        [SerializeField] private float attackRange = 5;
+        [SerializeField] private float maxAcceleration = 5;
+        [SerializeField] private float maxSpeed = 3;
+        [SerializeField] private float rotationRate = 180;
+        [SerializeField] private float missileSpeed = 6;
+        [SerializeField] private float attackRange = 6;
         [SerializeField] private float minDistanceFromTarget = 2;
         [SerializeField] private float maxDistanceFromTarget = 10;
         [SerializeField] private float minTimeBetweenShots = 1f;
@@ -36,15 +37,6 @@ namespace Enemy {
             _aiMode = AiMode.Flock;
         }
 
-        public void Fire() {
-            if(Time.time - _lastShotTime < minTimeBetweenShots) return;
-            _lastShotTime = Time.time;
-            GameObject projectile = Instantiate(missilePrefab, _transform.position, _transform.rotation);
-            Missile missile = projectile.GetComponent<Missile>();
-            if(!missile) return;
-            missile.Launch(attackRange, missileSpeed, gameObject);
-        }
-
         private void Awake() {
             _steering = GetComponent<Steering2D>();
             _rigidbody = GetComponent<Rigidbody2D>();
@@ -54,7 +46,7 @@ namespace Enemy {
         }
 
         private void FixedUpdate() {
-            if(!_target) TargetLost();
+            if(!_target) OnTargetLost();
             MaybeAttack();
             switch(_aiMode) {
                 case AiMode.Wander:
@@ -76,7 +68,16 @@ namespace Enemy {
             }
         }
 
-        private void TargetLost() {
+        private void Fire() {
+            if(Time.time - _lastShotTime < minTimeBetweenShots) return;
+            _lastShotTime = Time.time;
+            GameObject projectile = Instantiate(missilePrefab, _transform.position, _transform.rotation);
+            Missile missile = projectile.GetComponent<Missile>();
+            if(!missile) return;
+            missile.Launch(attackRange, missileSpeed, gameObject);
+        }
+
+        private void OnTargetLost() {
             if(_aiMode == AiMode.Wander) return;
             FindPlayer();
             if(_target) return;
@@ -121,12 +122,6 @@ namespace Enemy {
             Fire();
         }
 
-        private void Flock() {
-        }
-
-        private void Wander() {
-        }
-
         private void FaceMovement() {
             Vector2 direction = _rigidbody.velocity;
             float orientation = _steering.Face(direction);
@@ -157,6 +152,16 @@ namespace Enemy {
             else acceleration = _steering.Flee(_simpleTarget.position, maxAcceleration);
             _steering.UpdateSteering(acceleration, maxSpeed);
         }
+
+        private void Flock() {
+        }
+
+        private void Wander() {
+            Vector2 acceleration = _steering.Wander(3, 2, 45,
+                ref _wanderState, maxAcceleration);
+            _steering.UpdateSteering(acceleration, maxSpeed);
+        }
+
 
         private void FindPlayer() {
             GameObject obj = GameObject.FindGameObjectWithTag("Player");

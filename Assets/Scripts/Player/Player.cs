@@ -19,32 +19,6 @@ namespace Player {
         [SerializeField] private float minTimeBetweenShots = .5f;
         [SerializeField] private GameObject missilePrefab = null;
 
-        public void Move(Vector2 targetVelocity) {
-            Vector3 delta = (targetVelocity - _rigidbody.velocity)/Time.smoothDeltaTime;
-            float orientation = Mathf.Atan2(targetVelocity.y, targetVelocity.x)*Mathf.Rad2Deg;
-            float maxAcceleration = orientation > 45 && orientation < 135
-                ? maxForwardAcceleration
-                : orientation < -45 && orientation > -135
-                    ? maxBackwardAcceleration
-                    : maxSidewaysAcceleration;
-
-            delta = Vector3.ClampMagnitude(delta, maxAcceleration);
-            _rigidbody.AddForce(delta/_rigidbody.mass, ForceMode2D.Force);
-        }
-
-        public void Rotate(float rate) {
-            _rigidbody.rotation += rate*Time.smoothDeltaTime;
-        }
-
-        public void Fire() {
-            if(Time.time - _lastShotTime < minTimeBetweenShots) return;
-            _lastShotTime = Time.time;
-            GameObject projectile = Instantiate(missilePrefab, _transform.position, _transform.rotation);
-            Missile missile = projectile.GetComponent<Missile>();
-            if(!missile) return;
-            missile.Launch(attackRange, missileSpeed, gameObject);
-        }
-
         private void Awake() {
             _rigidbody = GetComponent<Rigidbody2D>();
             _transform = transform;
@@ -65,6 +39,31 @@ namespace Player {
                 Move(motion*maxSpeed);
             }
         }
+        
+        private void Move(Vector2 targetVelocity) {
+            Vector3 delta = (targetVelocity - _rigidbody.velocity)/Time.smoothDeltaTime;
+            float orientation = Mathf.Atan2(targetVelocity.y, targetVelocity.x)*Mathf.Rad2Deg;
+            float maxAcceleration = orientation > 45 && orientation < 135
+                ? maxForwardAcceleration
+                : orientation < -45 && orientation > -135
+                    ? maxBackwardAcceleration
+                    : maxSidewaysAcceleration;
 
+            delta = Vector3.ClampMagnitude(delta, maxAcceleration);
+            _rigidbody.AddForce(delta/_rigidbody.mass, ForceMode2D.Force);
+        }
+
+        private void Rotate(float rate) {
+            _rigidbody.rotation += rate*Time.smoothDeltaTime;
+        }
+
+        private void Fire() {
+            if(Time.time - _lastShotTime < minTimeBetweenShots) return;
+            _lastShotTime = Time.time;
+            GameObject projectile = Instantiate(missilePrefab, _transform.position, _transform.rotation);
+            Missile missile = projectile.GetComponent<Missile>();
+            if(!missile) return;
+            missile.Launch(attackRange, missileSpeed, gameObject);
+        }
     }
 }
