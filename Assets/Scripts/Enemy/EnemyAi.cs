@@ -8,7 +8,7 @@ namespace Enemy {
         private Rigidbody2D _rigidbody;
         private Rigidbody2D _target;
         private Transform _simpleTarget;
-        private AiMode _aiMode = AiMode.Seek;
+        private AiMode _aiMode = AiMode.Flock;
         private Vector2 _targetDelta = default;
         private float _targetDistance = Mathf.Infinity;
 
@@ -20,6 +20,15 @@ namespace Enemy {
         [SerializeField] private float minDistanceFromTarget = 2;
         [SerializeField] private float maxDistanceFromTarget = 10;
         [SerializeField] private float maxPrediction = 1;
+        [SerializeField] private float minTimeBetweenShots = 1f;
+        [SerializeField] private GameObject missilePrefab = null;
+        public void SetAsLeader() {
+            _aiMode = AiMode.Seek;
+        }
+
+        public void SetAsFlock() {
+            _aiMode = AiMode.Flock;
+        }
 
         private void Awake() {
             _steering = GetComponent<Steering2D>();
@@ -28,8 +37,7 @@ namespace Enemy {
         }
 
         private void FixedUpdate() {
-            if(!_target) FindPlayer();
-            if(!_simpleTarget) return;
+            if(!_target) TargetLost();
             MaybeAttack();
             switch(_aiMode) {
                 case AiMode.Wander:
@@ -51,9 +59,16 @@ namespace Enemy {
             }
         }
 
+        private void TargetLost() {
+            if(_aiMode == AiMode.Wander) return;
+            FindPlayer();
+            if(_target) return;
+            if(_aiMode != AiMode.Flock) _aiMode = AiMode.Wander;
+        }
+
         private void MaybeAttack() {
             if(!_target) {
-                //cannot attack
+                //cannot attack -- no target
                 _targetDistance = Mathf.Infinity;
                 _targetDelta = default;
                 FaceMovement();
@@ -63,7 +78,7 @@ namespace Enemy {
             _targetDelta = _target.position - _rigidbody.position;
             _targetDistance = _targetDelta.magnitude;
             if(_targetDistance > attackRange) {
-                //cannot attack
+                //cannot attack -- out of range
                 FaceMovement();
                 return;
             }
