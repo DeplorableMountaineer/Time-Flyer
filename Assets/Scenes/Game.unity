@@ -679,15 +679,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAcceleration: 20
-  maxSpeed: 1
+  maxSpeed: 3
   rotationRate: 90
-  missileSpeed: 15
+  missileSpeed: 6
   attackRange: 6
-  minDistanceFromTarget: 3
+  minDistanceFromTarget: 2
   maxDistanceFromTarget: 10
-  maxPrediction: 1
   minTimeBetweenShots: 1
-  missilePrefab: {fileID: 0}
+  missilePrefab: {fileID: 4626322941626754139, guid: 51ce3a70d4196cf49828927672fc7d31,
+    type: 3}
 --- !u!1 &1192544401
 GameObject:
   m_ObjectHideFlags: 0

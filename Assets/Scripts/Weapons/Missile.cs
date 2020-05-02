@@ -12,7 +12,7 @@ namespace Weapons {
             _rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        public void Launch(float range, float speed, GameObject spawner, bool isEnemyMissile=false) {
+        public void Launch(float range, float speed, GameObject spawner, bool isEnemyMissile = false) {
             _spawner = spawner.GetComponent<Collider2D>();
             Destroy(gameObject, range/speed);
             _rigidbody.velocity = speed*transform.up;
@@ -24,6 +24,8 @@ namespace Weapons {
             if(!_isLaunched) return;
             if(other == _spawner || other.transform == transform) return; //do not shoot self
             if(_isEnemyMissile && !other.CompareTag("Player")) return; //do not shoot teammates
+            Camera playerCamera = other.GetComponentInChildren<Camera>();
+            if(playerCamera) playerCamera.transform.SetParent(null, true);
             Destroy(other.gameObject);
             Destroy(gameObject);
         }

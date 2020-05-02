@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using Weapons;
+using Random = UnityEngine.Random;
 
 namespace Enemy {
     [RequireComponent(typeof(Steering2D)), DisallowMultipleComponent]
@@ -8,9 +10,13 @@ namespace Enemy {
         private Rigidbody2D _rigidbody;
         private Rigidbody2D _target;
         private Transform _simpleTarget;
-        private AiMode _aiMode = AiMode.Flock;
+        private AiMode _aiMode = AiMode.Seek;
         private Vector2 _targetDelta = default;
         private float _targetDistance = Mathf.Infinity;
+        private float _lastShotTime = 0;
+        private Transform _transform;
+        private Collider2D _collider;
+        private readonly RaycastHit2D[] _hits = new RaycastHit2D[32];
 
         [SerializeField] private float maxAcceleration = 20;
         [SerializeField] private float maxSpeed = 5;
@@ -19,9 +25,9 @@ namespace Enemy {
         [SerializeField] private float attackRange = 5;
         [SerializeField] private float minDistanceFromTarget = 2;
         [SerializeField] private float maxDistanceFromTarget = 10;
-        [SerializeField] private float maxPrediction = 1;
         [SerializeField] private float minTimeBetweenShots = 1f;
         [SerializeField] private GameObject missilePrefab = null;
+
         public void SetAsLeader() {
             _aiMode = AiMode.Seek;
         }
@@ -30,9 +36,20 @@ namespace Enemy {
             _aiMode = AiMode.Flock;
         }
 
+        public void Fire() {
+            if(Time.time - _lastShotTime < minTimeBetweenShots) return;
+            _lastShotTime = Time.time;
+            GameObject projectile = Instantiate(missilePrefab, _transform.position, _transform.rotation);
+            Missile missile = projectile.GetComponent<Missile>();
+            if(!missile) return;
+            missile.Launch(attackRange, missileSpeed, gameObject);
+        }
+
         private void Awake() {
             _steering = GetComponent<Steering2D>();
             _rigidbody = GetComponent<Rigidbody2D>();
+            _collider = GetComponent<Collider2D>();
+            _transform = transform;
             FindPlayer();
         }
 
@@ -83,13 +100,25 @@ namespace Enemy {
                 return;
             }
 
-            //can attack
-            float prediction = maxPrediction;
-            if(missileSpeed > _targetDistance/maxPrediction) prediction = _targetDistance/missileSpeed;
+            //can attack, so face where target will be when missile arrives
+            float prediction = attackRange/missileSpeed;
+            if(missileSpeed > _targetDistance/prediction) prediction = _targetDistance/missileSpeed;
             _targetDelta += _target.velocity*prediction;
             FaceTarget();
 
-            //TODO attack
+            if(Random.value*minTimeBetweenShots >= Time.smoothDeltaTime) return; //fire irregularly
+
+            //check for obstruction
+            int size = Physics2D.RaycastNonAlloc(_transform.position, _targetDelta.normalized,
+                _hits, attackRange);
+            for(int i = 0; i < size; i++) {
+                if(_hits[i].collider == _collider) continue; //don't count self
+                if(_hits[i].rigidbody.velocity.magnitude >= missileSpeed*.9f) continue; // don't count missiles
+                if(_hits[i].transform == _target.transform) continue; //don't count target
+                return;
+            }
+
+            Fire();
         }
 
         private void Flock() {

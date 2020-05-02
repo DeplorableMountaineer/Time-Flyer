@@ -65,5 +65,6 @@ namespace Player {
                 Move(motion*maxSpeed);
             }
         }
+
     }
 }
