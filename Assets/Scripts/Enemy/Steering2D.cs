@@ -193,8 +193,9 @@ namespace Enemy {
             Vector2 velocity = default;
             float totalMass = 0;
             foreach(Rigidbody2D target in flock) {
+                if(target == _rigidbody) continue;
                 float mass = _rigidbody.mass;
-                velocity += target.position*mass;
+                velocity += target.velocity*mass;
                 totalMass += mass;
             }
 
