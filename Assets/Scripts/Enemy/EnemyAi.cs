@@ -29,7 +29,8 @@ namespace Enemy {
         [SerializeField] private float maxDistanceFromTarget = 10;
         [SerializeField] private float minTimeBetweenShots = 1f;
         [SerializeField] private GameObject missilePrefab = null;
-
+        [SerializeField] private float damagePerShot = 30;
+        
         public void SetAsLeader(Flock flock) {
             _aiMode = AiMode.Seek;
             _flock = flock;
@@ -81,7 +82,7 @@ namespace Enemy {
             GameObject projectile = Instantiate(missilePrefab, _transform.position, _transform.rotation);
             Missile missile = projectile.GetComponent<Missile>();
             if(!missile) return;
-            missile.Launch(attackRange, missileSpeed, gameObject, true);
+            missile.Launch(attackRange, missileSpeed, gameObject, damagePerShot, true);
         }
 
         private void OnTargetLost() {

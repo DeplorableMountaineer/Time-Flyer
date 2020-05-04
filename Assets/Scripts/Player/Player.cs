@@ -18,6 +18,7 @@ namespace Player {
         [SerializeField] private float attackRange = 5;
         [SerializeField] private float minTimeBetweenShots = .5f;
         [SerializeField] private GameObject missilePrefab = null;
+        [SerializeField] private float damagePerShot = 50;
 
         private void Awake() {
             _rigidbody = GetComponent<Rigidbody2D>();
@@ -39,7 +40,7 @@ namespace Player {
                 Move(motion*maxSpeed);
             }
         }
-        
+
         private void Move(Vector2 targetVelocity) {
             Vector3 delta = (targetVelocity - _rigidbody.velocity)/Time.smoothDeltaTime;
             float orientation = Mathf.Atan2(targetVelocity.y, targetVelocity.x)*Mathf.Rad2Deg;
@@ -63,7 +64,7 @@ namespace Player {
             GameObject projectile = Instantiate(missilePrefab, _transform.position, _transform.rotation);
             Missile missile = projectile.GetComponent<Missile>();
             if(!missile) return;
-            missile.Launch(attackRange, missileSpeed, gameObject);
+            missile.Launch(attackRange, missileSpeed, gameObject, damagePerShot);
         }
     }
 }

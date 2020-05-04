@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 942511088414957589}
   - component: {fileID: 942511088414957590}
   - component: {fileID: 942511088414957591}
+  - component: {fileID: 5189402020995925998}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -163,6 +164,22 @@ MonoBehaviour:
   attackRange: 6
   minDistanceFromTarget: 2
   maxDistanceFromTarget: 10
-  minTimeBetweenShots: 1
+  minTimeBetweenShots: 3
   missilePrefab: {fileID: 4626322941626754139, guid: 51ce3a70d4196cf49828927672fc7d31,
     type: 3}
+  damagePerShot: 30
+--- !u!114 &5189402020995925998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942511088414957593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd9b4dd9c2bc4f40a21b902cff2745f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHealth: 100
+  maxHealth: 100
+  healingRate: 10

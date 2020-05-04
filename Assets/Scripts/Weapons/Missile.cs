@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Pawn;
+using UnityEngine;
 
 namespace Weapons {
     [RequireComponent(typeof(Rigidbody2D))] [DisallowMultipleComponent]
@@ -7,26 +8,27 @@ namespace Weapons {
         private Collider2D _spawner;
         private bool _isLaunched = false;
         private bool _isEnemyMissile = false;
+        private float _damage;
 
         private void Awake() {
             _rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        public void Launch(float range, float speed, GameObject spawner, bool isEnemyMissile = false) {
+        public void Launch(float range, float speed, GameObject spawner, float damage, bool isEnemyMissile = false) {
             _spawner = spawner.GetComponent<Collider2D>();
             Destroy(gameObject, range/speed);
             _rigidbody.velocity = speed*transform.up;
             _isEnemyMissile = isEnemyMissile;
             _isLaunched = true;
+            _damage = damage;
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
             if(!_isLaunched) return;
             if(other == _spawner || other.transform == transform) return; //do not shoot self
             if(_isEnemyMissile && !other.CompareTag("Player")) return; //do not shoot teammates
-            Camera playerCamera = other.GetComponentInChildren<Camera>();
-            if(playerCamera) playerCamera.transform.SetParent(null, true);
-            Destroy(other.gameObject);
+            Health health = other.GetComponent<Health>();
+            if(health) health.TakeDamage(_damage);
             Destroy(gameObject);
         }
     }

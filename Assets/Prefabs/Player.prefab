@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9059924288381953401}
   - component: {fileID: 9059924288381953406}
   - component: {fileID: 9059924288381953407}
+  - component: {fileID: 7679480163771375361}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -223,6 +224,22 @@ MonoBehaviour:
   minTimeBetweenShots: 0.5
   missilePrefab: {fileID: 4626322941626754139, guid: fe478c186c474dc498ba4375bd20d617,
     type: 3}
+  damagePerShot: 50
+--- !u!114 &7679480163771375361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9059924288381953397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd9b4dd9c2bc4f40a21b902cff2745f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHealth: 100
+  maxHealth: 100
+  healingRate: 10
 --- !u!1 &9059924288785109854
 GameObject:
   m_ObjectHideFlags: 0
