@@ -159,6 +159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxAcceleration: 5
   maxSpeed: 3
+  fleeSpeed: 7
+  flockSpeed: 6
   rotationRate: 180
   missileSpeed: 6
   attackRange: 6
@@ -167,7 +169,11 @@ MonoBehaviour:
   minTimeBetweenShots: 3
   missilePrefab: {fileID: 4626322941626754139, guid: 51ce3a70d4196cf49828927672fc7d31,
     type: 3}
-  damagePerShot: 30
+  damagePerShot: 40
+  separationStrength: 10
+  separationThreshold: 4
+  cohesionTargetRadius: 3
+  cohesionSlowRadius: 6
 --- !u!114 &5189402020995925998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,4 +188,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 100
   maxHealth: 100
-  healingRate: 10
+  healingRate: 5

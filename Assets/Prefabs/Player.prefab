@@ -220,11 +220,11 @@ MonoBehaviour:
   maxSpeed: 5
   rotationRate: 180
   missileSpeed: 15
-  attackRange: 5
+  attackRange: 10
   minTimeBetweenShots: 0.5
   missilePrefab: {fileID: 4626322941626754139, guid: fe478c186c474dc498ba4375bd20d617,
     type: 3}
-  damagePerShot: 50
+  damagePerShot: 60
 --- !u!114 &7679480163771375361
 MonoBehaviour:
   m_ObjectHideFlags: 0

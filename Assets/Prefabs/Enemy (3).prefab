@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 942511088414957591}
   - component: {fileID: 5189402020995925998}
   m_Layer: 0
-  m_Name: Enemy (2)
+  m_Name: Enemy (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: -88250709
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f7eb00cb3ec9bab45b85d561558c4250, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9323a6c37ab7cee46aff0f07c38607a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -98,7 +98,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.17089844
+  m_Mass: 10.0111
   m_LinearDrag: 0.1
   m_AngularDrag: 0.1
   m_GravityScale: 0
@@ -124,14 +124,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.3125, y: 0.546875}
+    oldSize: {x: 2.09, y: 4.79}
     newSize: {x: 0.4, y: 0.7}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.3125, y: 0.546875}
+  m_Size: {x: 2.09, y: 4.79}
   m_EdgeRadius: 0
 --- !u!114 &942511088414957590
 MonoBehaviour:
@@ -157,17 +157,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 327123697bf47304488565367b664eee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAcceleration: 5
-  maxSpeed: 3
-  fleeSpeed: 7
-  flockSpeed: 6
-  rotationRate: 180
-  missileSpeed: 6
-  attackRange: 6
-  minDistanceFromTarget: 2
+  maxAcceleration: 10
+  maxSpeed: 6
+  fleeSpeed: 8
+  flockSpeed: 8
+  rotationRate: 360
+  missileSpeed: 8
+  attackRange: 8
+  minDistanceFromTarget: 4
   maxDistanceFromTarget: 10
-  minTimeBetweenShots: 3
-  missilePrefab: {fileID: 4626322941626754139, guid: 51ce3a70d4196cf49828927672fc7d31,
+  minTimeBetweenShots: 2
+  missilePrefab: {fileID: 4626322941626754139, guid: c3f288a24e2d1374f814b8610e58ad06,
     type: 3}
   damagePerShot: 40
   separationStrength: 10

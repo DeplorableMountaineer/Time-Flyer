@@ -19,9 +19,12 @@ namespace Enemy {
         private float _wanderState = 0;
         private readonly RaycastHit2D[] _hits = new RaycastHit2D[32];
         private Flock _flock;
+        private float _targetSpeed;
 
         [SerializeField] private float maxAcceleration = 5;
         [SerializeField] private float maxSpeed = 3;
+        [SerializeField] private float fleeSpeed = 6;
+        [SerializeField] private float flockSpeed = 6;
         [SerializeField] private float rotationRate = 180;
         [SerializeField] private float missileSpeed = 6;
         [SerializeField] private float attackRange = 6;
@@ -30,7 +33,12 @@ namespace Enemy {
         [SerializeField] private float minTimeBetweenShots = 1f;
         [SerializeField] private GameObject missilePrefab = null;
         [SerializeField] private float damagePerShot = 30;
-        
+        [SerializeField] private float separationStrength = 10;
+        [SerializeField] private float separationThreshold = 2;
+        [SerializeField] private float cohesionTargetRadius = 2;
+        [SerializeField] private float cohesionSlowRadius = 4;
+
+
         public void SetAsLeader(Flock flock) {
             _aiMode = AiMode.Seek;
             _flock = flock;
@@ -42,6 +50,7 @@ namespace Enemy {
         }
 
         private void Awake() {
+            _targetSpeed = maxSpeed;
             _steering = GetComponent<Steering2D>();
             _rigidbody = GetComponent<Rigidbody2D>();
             _collider = GetComponent<Collider2D>();
@@ -54,17 +63,21 @@ namespace Enemy {
             MaybeAttack();
             switch(_aiMode) {
                 case AiMode.Wander:
+                    _targetSpeed = maxSpeed;
                     Wander();
                     break;
                 case AiMode.Seek:
+                    _targetSpeed = maxSpeed;
                     Seek();
                     if(_targetDistance < minDistanceFromTarget) _aiMode = AiMode.Flee;
                     break;
                 case AiMode.Flee:
+                    _targetSpeed = fleeSpeed;
                     Flee();
                     if(_targetDistance > maxDistanceFromTarget) _aiMode = AiMode.Seek;
                     break;
                 case AiMode.Flock:
+                    _targetSpeed = flockSpeed;
                     Flock();
                     break;
                 default:
@@ -149,7 +162,7 @@ namespace Enemy {
                 acceleration = _steering.Pursue(_target.position, _target.velocity,
                     maxAcceleration);
             else acceleration = _steering.Seek(_simpleTarget.position, maxAcceleration);
-            _steering.UpdateSteering(acceleration, maxSpeed);
+            _steering.UpdateSteering(acceleration, _targetSpeed);
         }
 
         private void Flee() {
@@ -158,7 +171,7 @@ namespace Enemy {
                 acceleration = _steering.Evade(_target.position, _target.velocity,
                     maxAcceleration);
             else acceleration = _steering.Flee(_simpleTarget.position, maxAcceleration);
-            _steering.UpdateSteering(acceleration, maxSpeed);
+            _steering.UpdateSteering(acceleration, _targetSpeed);
         }
 
         private void Flock() {
@@ -169,17 +182,18 @@ namespace Enemy {
 
             Vector2 targetVelocity = _steering.ComputeFlockVelocity(_flock.AsEnumerable());
             Vector2 acceleration = _steering.MatchVelocity(targetVelocity, maxAcceleration);
-            acceleration += _steering.Separation(maxAcceleration, _flock.AsEnumerable(), 1);
-            acceleration += _steering.Cohesion(maxAcceleration, _flock.AsEnumerable(), maxSpeed, 1,
-                2);
+            acceleration += _steering.Separation(maxAcceleration, _flock.AsEnumerable(), separationThreshold,
+                separationStrength);
+            acceleration += _steering.Cohesion(maxAcceleration, _flock.AsEnumerable(), _targetSpeed,
+                cohesionTargetRadius, cohesionSlowRadius);
             acceleration = Vector2.ClampMagnitude(acceleration, maxAcceleration);
-            _steering.UpdateSteering(acceleration, maxSpeed);
+            _steering.UpdateSteering(acceleration, _targetSpeed);
         }
 
         private void Wander() {
             Vector2 acceleration = _steering.Wander(3, 2, 45,
                 ref _wanderState, maxAcceleration);
-            _steering.UpdateSteering(acceleration, maxSpeed);
+            _steering.UpdateSteering(acceleration, _targetSpeed);
         }
 
 
