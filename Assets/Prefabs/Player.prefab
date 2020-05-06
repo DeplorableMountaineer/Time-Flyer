@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9059924288381953406}
   - component: {fileID: 9059924288381953407}
   - component: {fileID: 7679480163771375361}
+  - component: {fileID: -2776953734342742739}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -242,6 +243,18 @@ MonoBehaviour:
   maxHealth: 100
   healingRate: 10
   flames: {fileID: 5371816185709128856}
+--- !u!114 &-2776953734342742739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9059924288381953397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1720deeb585640b88d9be09c3737142e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9059924288785109854
 GameObject:
   m_ObjectHideFlags: 0

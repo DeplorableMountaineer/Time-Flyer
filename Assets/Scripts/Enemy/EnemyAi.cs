@@ -1,13 +1,16 @@
 ﻿using System;
+using Pawn;
 using UnityEngine;
 using Weapons;
 using Random = UnityEngine.Random;
 
 namespace Enemy {
-    [RequireComponent(typeof(Steering2D)), DisallowMultipleComponent]
+    [RequireComponent(typeof(Steering2D), typeof(MovingBody)),
+     DisallowMultipleComponent]
     public class EnemyAi : MonoBehaviour {
         private Steering2D _steering;
         private Rigidbody2D _rigidbody;
+        private MovingBody _movingBody;
         private Rigidbody2D _target;
         private Transform _simpleTarget;
         private AiMode _aiMode = AiMode.Seek;
@@ -37,7 +40,7 @@ namespace Enemy {
         [SerializeField] private float separationThreshold = 2;
         [SerializeField] private float cohesionTargetRadius = 2;
         [SerializeField] private float cohesionSlowRadius = 4;
-
+        [SerializeField] private float collisionAvoidanceThreshold = 5;
 
         public void SetAsLeader(Flock flock) {
             _aiMode = AiMode.Seek;
@@ -54,6 +57,7 @@ namespace Enemy {
             _steering = GetComponent<Steering2D>();
             _rigidbody = GetComponent<Rigidbody2D>();
             _collider = GetComponent<Collider2D>();
+            _movingBody = GetComponent<MovingBody>();
             _transform = transform;
             FindPlayer();
         }
@@ -156,7 +160,15 @@ namespace Enemy {
                 1, 5);
         }
 
+        private bool AvoidCollision() {
+            Rigidbody2D rb = _movingBody.FindClosest(collisionAvoidanceThreshold, out Vector2 direction);
+            if(rb == null) return false;
+            _steering.UpdateSteering(direction*maxAcceleration, _targetSpeed);
+            return true;
+        }
+
         private void Seek() {
+            if(AvoidCollision()) return;
             Vector2 acceleration;
             if(_target)
                 acceleration = _steering.Pursue(_target.position, _target.velocity,
@@ -166,6 +178,7 @@ namespace Enemy {
         }
 
         private void Flee() {
+            if(AvoidCollision()) return;
             Vector2 acceleration;
             if(_target)
                 acceleration = _steering.Evade(_target.position, _target.velocity,
@@ -180,6 +193,8 @@ namespace Enemy {
                 return;
             }
 
+            if(AvoidCollision()) return;
+
             Vector2 targetVelocity = _steering.ComputeFlockVelocity(_flock.AsEnumerable());
             Vector2 acceleration = _steering.MatchVelocity(targetVelocity, maxAcceleration);
             acceleration += _steering.Separation(maxAcceleration, _flock.AsEnumerable(), separationThreshold,
@@ -191,6 +206,7 @@ namespace Enemy {
         }
 
         private void Wander() {
+            if(AvoidCollision()) return;
             Vector2 acceleration = _steering.Wander(3, 2, 45,
                 ref _wanderState, maxAcceleration);
             _steering.UpdateSteering(acceleration, _targetSpeed);
