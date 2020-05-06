@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using Enemy;
+using UnityEngine;
 
 namespace Pawn {
     public class Health : MonoBehaviour {
         private float _health;
+        private EnemyAi _enemySelf;
         [SerializeField] private float startingHealth = 100;
         [SerializeField] private float maxHealth = 100;
         [SerializeField] private float healingRate = 10;
@@ -13,6 +15,7 @@ namespace Pawn {
             if(_health < 0) Die();
             enabled = _health < maxHealth;
             SetFlameProperties();
+            if(_enemySelf) _enemySelf.OnHit();
         }
 
         public void Die() {
@@ -20,6 +23,10 @@ namespace Pawn {
             Camera playerCamera = GetComponentInChildren<Camera>();
             if(playerCamera) playerCamera.transform.SetParent(null, true);
             Destroy(gameObject);
+        }
+
+        private void Awake() {
+            _enemySelf = GetComponent<EnemyAi>();
         }
 
         private void Start() {
@@ -31,6 +38,7 @@ namespace Pawn {
         private void Update() {
             float newHealth = _health + healingRate*Time.smoothDeltaTime;
             if(newHealth >= maxHealth) {
+                if(_enemySelf) _enemySelf.OnHealthRestored();
                 if(enabled) {
                     SetFlameProperties();
                     enabled = false;

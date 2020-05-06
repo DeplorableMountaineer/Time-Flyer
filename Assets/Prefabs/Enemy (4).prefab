@@ -167,7 +167,7 @@ MonoBehaviour:
   missileSpeed: 6
   attackRange: 6
   minDistanceFromTarget: 4
-  maxDistanceFromTarget: 10
+  maxDistanceFromTarget: 7
   minTimeBetweenShots: 4
   missilePrefab: {fileID: 4626322941626754139, guid: d59a5ac964c5276468556fc0c66c40b6,
     type: 3}
@@ -176,6 +176,7 @@ MonoBehaviour:
   separationThreshold: 4
   cohesionTargetRadius: 3
   cohesionSlowRadius: 6
+  collisionAvoidanceThreshold: 2
 --- !u!114 &5189402020995925998
 MonoBehaviour:
   m_ObjectHideFlags: 0

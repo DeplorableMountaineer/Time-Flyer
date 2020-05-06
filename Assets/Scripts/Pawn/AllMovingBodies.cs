@@ -16,7 +16,7 @@ namespace Pawn {
             _bodies.Remove(rb);
         }
 
-        public Rigidbody2D FindClosest(Rigidbody2D self, float collisionAvoidanceThreshold,
+        public Rigidbody2D FindLikeliestCollision(Rigidbody2D self, float collisionAvoidanceThreshold,
             out Vector2 avoidanceDirection) {
             float shortestTime = Mathf.Infinity;
             Rigidbody2D firstTarget = null;
@@ -30,11 +30,14 @@ namespace Pawn {
                 if(distance > collisionAvoidanceThreshold) continue;
                 Vector2 relativeVel = rb.velocity - self.velocity;
                 float relativeSpeedSqr = relativeVel.sqrMagnitude;
+                //to find time of closest approach, relativePosition dot relativeVelocity,
+                //divided by square of magnitude of velocity
                 float timeToCollision = Vector2.Dot(avoidanceDirection, relativeVel)/relativeSpeedSqr;
                 float relativeSpeed = Mathf.Sqrt(relativeSpeedSqr);
                 float minSeparation = distance - relativeSpeed*timeToCollision;
-                if(minSeparation > 2*radius) continue;
-                if(!(timeToCollision > 0) || !(timeToCollision < shortestTime)) continue;
+                if(minSeparation > 2*radius) continue; //a near miss, skip it
+                //if something else collides sooner, or if closest approach is already in the past, skip it
+                if(timeToCollision <= 0 || timeToCollision > shortestTime) continue;
                 shortestTime = timeToCollision;
                 firstTarget = rb;
                 firstMinSeparation = minSeparation;
@@ -48,6 +51,7 @@ namespace Pawn {
                 return null;
             }
 
+            //if already colliding, separate from current position, else separate from predicted position
             if(firstMinSeparation <= 0 || firstDistance < 2*radius) avoidanceDirection = firstRelativePos.normalized;
             else avoidanceDirection = (firstRelativePos + firstRelativeVel*shortestTime).normalized;
             return firstTarget;

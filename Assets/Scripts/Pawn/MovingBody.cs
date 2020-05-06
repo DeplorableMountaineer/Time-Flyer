@@ -6,11 +6,12 @@ namespace Pawn {
         private Rigidbody2D _rigidbody;
         private AllMovingBodies _allMovingBodies;
 
-        public Rigidbody2D FindClosest(float collisionAvoidanceThreshold, out Vector2 avoidanceDirection) {
+        public Rigidbody2D FindLikeliestCollision(float collisionAvoidanceThreshold, out Vector2 avoidanceDirection) {
             avoidanceDirection = default;
             return !_allMovingBodies
                 ? null
-                : _allMovingBodies.FindClosest(_rigidbody, collisionAvoidanceThreshold, out avoidanceDirection);
+                : _allMovingBodies.FindLikeliestCollision(_rigidbody, collisionAvoidanceThreshold,
+                    out avoidanceDirection);
         }
 
         private void Awake() {
