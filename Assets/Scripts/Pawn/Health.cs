@@ -1,18 +1,24 @@
-﻿using Enemy;
+﻿using System.Globalization;
+using Enemy;
+using Player;
+using TMPro;
 using UnityEngine;
 
 namespace Pawn {
     public class Health : MonoBehaviour {
         private float _health;
         private EnemyAi _enemySelf;
+        private Game _gameInstance;
         [SerializeField] private float startingHealth = 100;
         [SerializeField] private float maxHealth = 100;
         [SerializeField] private float healingRate = 10;
         [SerializeField] private ParticleSystem flames = null;
+        [SerializeField] private TextMeshProUGUI displayText = null;
 
         public void TakeDamage(float amount) {
             _health -= amount;
             if(_health < 0) Die();
+            UpdateDisplay();
             enabled = _health < maxHealth;
             SetFlameProperties();
             if(_enemySelf) _enemySelf.OnHit();
@@ -20,8 +26,15 @@ namespace Pawn {
 
         public void Die() {
             _health = 0;
-            Camera playerCamera = GetComponentInChildren<Camera>();
-            if(playerCamera) playerCamera.transform.SetParent(null, true);
+            UpdateDisplay();
+            if(_enemySelf) {
+                _gameInstance.AddKill();
+            }
+            else {
+                Camera playerCamera = GetComponentInChildren<Camera>();
+                if(playerCamera) playerCamera.transform.SetParent(null, true);
+            }
+
             Destroy(gameObject);
         }
 
@@ -33,6 +46,8 @@ namespace Pawn {
             _health = startingHealth;
             enabled = _health < maxHealth;
             SetFlameProperties();
+            UpdateDisplay();
+            _gameInstance = Game.Instance;//ensure Game is initialized at beginning
         }
 
         private void Update() {
@@ -40,17 +55,24 @@ namespace Pawn {
             if(newHealth >= maxHealth) {
                 if(_enemySelf) _enemySelf.OnHealthRestored();
                 if(enabled) {
-                    SetFlameProperties();
                     enabled = false;
+                    SetFlameProperties();
                 }
 
                 _health = maxHealth;
+                UpdateDisplay();
                 return;
             }
 
             if(Mathf.Abs(_health - newHealth) < .0001f) return;
             SetFlameProperties();
             _health = newHealth;
+            UpdateDisplay();
+        }
+
+        private void UpdateDisplay() {
+            if(!displayText) return;
+            displayText.text = Mathf.Floor(_health).ToString(CultureInfo.InvariantCulture);
         }
 
         private void SetFlameProperties() {

@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Enemy {
     public class Flock : MonoBehaviour {
         private Transform _transform;
+        private Wave _wave;
         private readonly List<Rigidbody2D> _flock = new List<Rigidbody2D>();
 
         [SerializeField] private int numShips = 3;
@@ -15,10 +16,16 @@ namespace Enemy {
             return _flock.AsEnumerable();
         }
 
+        public void SetWave(Wave wave) {
+            _wave = wave;
+        }
+
         public void RemoveMember(Rigidbody2D rb) {
             _flock.Remove(rb);
             if(_flock.Count == 0) {
-                if(this) Destroy(gameObject);
+                if(!this) return;
+                _wave.OnDeath(gameObject);
+                Destroy(gameObject);
                 return;
             }
 

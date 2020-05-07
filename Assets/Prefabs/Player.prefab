@@ -239,10 +239,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd9b4dd9c2bc4f40a21b902cff2745f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 100
-  maxHealth: 100
+  startingHealth: 150
+  maxHealth: 150
   healingRate: 10
   flames: {fileID: 5371816185709128856}
+  displayText: {fileID: 0}
 --- !u!114 &-2776953734342742739
 MonoBehaviour:
   m_ObjectHideFlags: 0

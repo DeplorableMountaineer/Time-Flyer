@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &82231221766631043
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 82231221766631164}
+  - component: {fileID: 82231221766631165}
+  - component: {fileID: 1953974987}
+  m_Layer: 0
+  m_Name: Wave 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &82231221766631164
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82231221766631043}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &82231221766631165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82231221766631043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4868d408c17a4b87aa87bae6d7fefce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.5
+--- !u!114 &1953974987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82231221766631043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f79f51ca81a90594c835e3046dfe8ca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flockData:
+  - flockPrefab: {fileID: 8917073426156367450, guid: 428c16c48720fee49b6f5e3d55deefe3,
+      type: 3}
+    startPosition: {x: -8, y: -3}
+    startRotation: 135
+    delayBeforeSpawn: 0
+  - flockPrefab: {fileID: 8917073426156367450, guid: 428c16c48720fee49b6f5e3d55deefe3,
+      type: 3}
+    startPosition: {x: -5, y: -5}
+    startRotation: -150
+    delayBeforeSpawn: 5
+  - flockPrefab: {fileID: 8917073426156367450, guid: 3abb95ffecf3ea2479981bf4d97ea5b5,
+      type: 3}
+    startPosition: {x: 5, y: -5}
+    startRotation: 150
+    delayBeforeSpawn: 5
+  - flockPrefab: {fileID: 8917073426156367450, guid: 3abb95ffecf3ea2479981bf4d97ea5b5,
+      type: 3}
+    startPosition: {x: 8, y: -3}
+    startRotation: 135
+    delayBeforeSpawn: 10
+  - flockPrefab: {fileID: 8917073426156367450, guid: 428c16c48720fee49b6f5e3d55deefe3,
+      type: 3}
+    startPosition: {x: -8, y: 3}
+    startRotation: -45
+    delayBeforeSpawn: 10
+  - flockPrefab: {fileID: 8917073426156367450, guid: 428c16c48720fee49b6f5e3d55deefe3,
+      type: 3}
+    startPosition: {x: -5, y: 5}
+    startRotation: 60
+    delayBeforeSpawn: 10
+  - flockPrefab: {fileID: 8917073426156367450, guid: 3abb95ffecf3ea2479981bf4d97ea5b5,
+      type: 3}
+    startPosition: {x: 5, y: 5}
+    startRotation: -60
+    delayBeforeSpawn: 15
+  - flockPrefab: {fileID: 8917073426156367450, guid: 3abb95ffecf3ea2479981bf4d97ea5b5,
+      type: 3}
+    startPosition: {x: 8, y: 3}
+    startRotation: -45
+    delayBeforeSpawn: 15
+  formationsText: {fileID: 0}

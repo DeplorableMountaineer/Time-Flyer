@@ -4,8 +4,6 @@ using UnityEngine;
 using Weapons;
 using Random = UnityEngine.Random;
 
-//TODO spawn waves of flocks
-
 namespace Enemy {
     [RequireComponent(typeof(Steering2D), typeof(MovingBody)),
      DisallowMultipleComponent]
