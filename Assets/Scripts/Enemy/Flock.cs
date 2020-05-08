@@ -23,8 +23,8 @@ namespace Enemy {
         public void RemoveMember(Rigidbody2D rb) {
             _flock.Remove(rb);
             if(_flock.Count == 0) {
-                if(!this) return;
                 _wave.OnDeath(gameObject);
+                if(!this) return;
                 Destroy(gameObject);
                 return;
             }

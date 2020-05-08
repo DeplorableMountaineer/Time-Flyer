@@ -26,21 +26,26 @@ namespace Enemy {
             SpawnNext(null);
         }
 
+
         private void UpdateDisplay() {
             if(!formationsText) return;
-            formationsText.text = _flocks.Count.ToString();
+            formationsText.text = (_flocks.Count - (_flocks.Count > 0 && _flocks[0] == null ? 1 : 0)).ToString();
         }
 
         private void SpawnNext(GameObject go) {
             _flocks.Add(go);
             UpdateDisplay();
-            if(flockData == null || _toSpawn >= flockData.Length) return;
+            if(flockData == null || _toSpawn >= flockData.Length) {
+                if(_flocks[0] == null) _flocks.RemoveAt(0);
+                return;
+            }
+
             StartCoroutine(flockData[_toSpawn].SpawnFlockInBackground(this, SpawnNext));
             _toSpawn++;
         }
 
         private void EndOfWave() {
-            Debug.Log("End of wave");
+            Game.Game.Instance.NextScene();
         }
     }
 

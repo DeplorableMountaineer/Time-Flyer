@@ -8,7 +8,7 @@ namespace Pawn {
     public class Health : MonoBehaviour {
         private float _health;
         private EnemyAi _enemySelf;
-        private Game _gameInstance;
+        private Game.Game _gameInstance;
         [SerializeField] private float startingHealth = 100;
         [SerializeField] private float maxHealth = 100;
         [SerializeField] private float healingRate = 10;
@@ -47,7 +47,7 @@ namespace Pawn {
             enabled = _health < maxHealth;
             SetFlameProperties();
             UpdateDisplay();
-            _gameInstance = Game.Instance;//ensure Game is initialized at beginning
+            _gameInstance = Game.Game.Instance;//ensure Game is initialized at beginning
         }
 
         private void Update() {
