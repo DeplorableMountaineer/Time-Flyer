@@ -21,6 +21,7 @@ namespace Enemy {
         }
 
         public void RemoveMember(Rigidbody2D rb) {
+            if(!this) return;
             _flock.Remove(rb);
             if(_flock.Count == 0) {
                 _wave.OnDeath(gameObject);

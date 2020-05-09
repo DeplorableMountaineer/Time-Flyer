@@ -373,18 +373,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 624c478bbadfbb94b9b4d15b8c7f51c0, type: 3}
---- !u!114 &564606962 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1624597099468447704, guid: 624c478bbadfbb94b9b4d15b8c7f51c0,
-    type: 3}
-  m_PrefabInstance: {fileID: 564606961}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306096fcc91f2ac4193c3e84c098c46c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &698889304
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,6 +451,7 @@ GameObject:
   - component: {fileID: 717937289}
   - component: {fileID: 717937288}
   - component: {fileID: 717937287}
+  - component: {fileID: 717937290}
   m_Layer: 5
   m_Name: Play Button
   m_TagString: Untagged
@@ -533,8 +522,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 564606962}
-        m_MethodName: NextScene
+      - m_Target: {fileID: 717937290}
+        m_MethodName: PlayButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -581,6 +570,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 717937285}
   m_CullTransparentMesh: 0
+--- !u!114 &717937290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717937285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b977b16c772d904428695c3f128f17c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &895010762
 GameObject:
   m_ObjectHideFlags: 0

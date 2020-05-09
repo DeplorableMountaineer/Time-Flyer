@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using Enemy;
-using Player;
 using TMPro;
 using UnityEngine;
 
@@ -33,6 +32,7 @@ namespace Pawn {
             else {
                 Camera playerCamera = GetComponentInChildren<Camera>();
                 if(playerCamera) playerCamera.transform.SetParent(null, true);
+                if(CompareTag("Player")) Game.Game.Instance.GameOver();
             }
 
             Destroy(gameObject);
@@ -47,7 +47,7 @@ namespace Pawn {
             enabled = _health < maxHealth;
             SetFlameProperties();
             UpdateDisplay();
-            _gameInstance = Game.Game.Instance;//ensure Game is initialized at beginning
+            _gameInstance = Game.Game.Instance; //ensure Game is initialized at beginning
         }
 
         private void Update() {

@@ -9,5 +9,10 @@ namespace Game {
         public void LoadLevel(int num) {
             SceneManager.LoadScene(levels[num%levels.Length]);
         }
+
+        public void LoadStartScene() {
+            SceneManager.LoadScene("Title");
+
+        }
     }
 }
