@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using Utilities;
-//TODO start screen, pause screen, checkpointing
+//TODO  pause screen, checkpointing, death screen
 namespace Game {
     public class Game : Singleton<Game> {
         private int _kills = 0;
