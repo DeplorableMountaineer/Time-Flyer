@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: All Game Levels
   m_EditorClassIdentifier: 
   levels:
-  - Game
+  - Level 1
+  - Level 2

@@ -1,11 +1,11 @@
 ﻿using TMPro;
 using UnityEngine;
 using Utilities;
-
+//TODO start screen, pause screen, checkpointing
 namespace Game {
     public class Game : Singleton<Game> {
         private int _kills = 0;
-        private int _currentLevel = 0;
+        private int _currentLevel = -1;
 
         [SerializeField] private TextMeshProUGUI killsText = null;
         [SerializeField] private Levels levels = null;
