@@ -5,6 +5,8 @@ using Utilities;
 //TODO  pause screen, checkpointing
 namespace Game {
     public class Game : Singleton<Game> {
+        private const string HighScore = "High Score";
+
         private int _kills = 0;
         private int _currentLevel = -1;
 
@@ -20,6 +22,8 @@ namespace Game {
         }
 
         public void GameOver() {
+            float highScore = GetHighScore();
+            if(_kills > highScore) SetHighScore(_kills);
             _currentLevel = -1;
             _kills = 0;
             Invoke(nameof(LoadStartScene), 5);
@@ -41,6 +45,11 @@ namespace Game {
             Kills++;
         }
 
+        public float GetHighScore() {
+            if(PlayerPrefs.HasKey(HighScore)) return PlayerPrefs.GetFloat(HighScore);
+            return 0;
+        }
+        
         private void Reset() {
             UpdateKillsDisplay();
         }
@@ -59,6 +68,11 @@ namespace Game {
 
         private void Start() {
             UpdateKillsDisplay();
+        }
+        
+        private void SetHighScore(float score) {
+            PlayerPrefs.SetFloat(HighScore, score);
+            PlayerPrefs.Save();
         }
 
         private void LoadStartScene() {
