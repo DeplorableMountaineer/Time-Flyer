@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Projectile
   - Kills Text
+  - Time Zone Text
   layers:
   - Default
   - TransparentFX

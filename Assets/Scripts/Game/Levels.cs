@@ -12,7 +12,6 @@ namespace Game {
 
         public void LoadStartScene() {
             SceneManager.LoadScene("Title");
-
         }
     }
 }
