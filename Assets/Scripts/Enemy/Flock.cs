@@ -24,6 +24,7 @@ namespace Enemy {
             if(!this) return;
             _flock.Remove(rb);
             if(_flock.Count == 0) {
+                Game.Game.Instance.AddToScore(numShips*5);
                 _wave.OnDeath(gameObject);
                 if(!this) return;
                 Destroy(gameObject);

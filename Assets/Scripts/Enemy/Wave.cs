@@ -17,6 +17,7 @@ namespace Enemy {
             _flocks.Remove(go);
             UpdateDisplay();
             if(_flocks.Count != 0) return;
+            Game.Game.Instance.AddToScore(50);
             if(!this) return;
             Destroy(gameObject);
             if(_toSpawn >= flockData.Length) EndOfWave();

@@ -2,37 +2,36 @@
 using UnityEngine;
 using Utilities;
 
-//TODO  pause screen, checkpointing
 namespace Game {
     public class Game : Singleton<Game> {
         private const string HighScore = "High Score";
 
-        private int _kills = 0;
+        private int _score = 0;
         private int _currentLevel = -1;
 
         [SerializeField] private TextMeshProUGUI killsText = null;
         [SerializeField] private Levels levels = null;
 
-        public int Kills {
-            get => _kills;
+        public int Score {
+            get => _score;
             set {
-                _kills = value;
+                _score = value;
                 UpdateKillsDisplay();
             }
         }
 
         public void GameOver() {
             float highScore = GetHighScore();
-            if(_kills > highScore) SetHighScore(_kills);
+            if(_score > highScore) SetHighScore(_score);
             _currentLevel = -1;
-            _kills = 0;
+            _score = 0;
             Invoke(nameof(LoadStartScene), 5);
         }
 
 
         public void FirstScene() {
             _currentLevel = 0;
-            _kills = 0;
+            _score = 0;
             levels.LoadLevel(_currentLevel);
         }
 
@@ -41,15 +40,15 @@ namespace Game {
             levels.LoadLevel(_currentLevel);
         }
 
-        public void AddKill() {
-            Kills++;
+        public void AddToScore(int amount) {
+            Score += amount;
         }
 
         public float GetHighScore() {
             if(PlayerPrefs.HasKey(HighScore)) return PlayerPrefs.GetFloat(HighScore);
             return 0;
         }
-        
+
         private void Reset() {
             UpdateKillsDisplay();
         }
@@ -69,7 +68,7 @@ namespace Game {
         private void Start() {
             UpdateKillsDisplay();
         }
-        
+
         private void SetHighScore(float score) {
             PlayerPrefs.SetFloat(HighScore, score);
             PlayerPrefs.Save();
@@ -88,7 +87,7 @@ namespace Game {
                 if(!killsText) return;
             }
 
-            killsText.text = Kills.ToString();
+            killsText.text = Score.ToString();
         }
     }
 }

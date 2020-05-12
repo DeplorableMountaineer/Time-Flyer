@@ -27,7 +27,7 @@ namespace Pawn {
             _health = 0;
             UpdateDisplay();
             if(_enemySelf) {
-                _gameInstance.AddKill();
+                _gameInstance.AddToScore(10);
             }
             else {
                 Camera playerCamera = GetComponentInChildren<Camera>();
