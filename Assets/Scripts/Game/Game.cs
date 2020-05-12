@@ -2,6 +2,12 @@
 using UnityEngine;
 using Utilities;
 
+//TODO sound effects
+//TODO time tunnel effect between levels
+//TODO enemy spawn effect
+//TODO fix one shot killing multiple enemies
+//TODO randomization of later levels
+//TODO fix score showing 0 at beginning of new levels
 namespace Game {
     public class Game : Singleton<Game> {
         private const string HighScore = "High Score";
@@ -11,14 +17,18 @@ namespace Game {
 
         [SerializeField] private TextMeshProUGUI killsText = null;
         [SerializeField] private Levels levels = null;
+        [SerializeField, Tooltip("For testing; only works in editor")]
+        private bool easyMode = false;
 
         public int Score {
             get => _score;
             set {
                 _score = value;
-                UpdateKillsDisplay();
+                UpdateScore();
             }
         }
+
+        public bool EasyMode => easyMode;
 
         public void GameOver() {
             float highScore = GetHighScore();
@@ -50,23 +60,25 @@ namespace Game {
         }
 
         private void Reset() {
-            UpdateKillsDisplay();
+            UpdateScore();
         }
 
         private void OnValidate() {
-            UpdateKillsDisplay();
+            UpdateScore();
         }
 
         /// <summary>
         ///     Use this for initialization.
         /// </summary>
         protected override void Awake() {
+            //only allow easy mode when testing in editor
+            if(EasyMode && !Application.isEditor) easyMode = false;
             base.Awake();
             Debug.Assert(levels != null);
         }
 
         private void Start() {
-            UpdateKillsDisplay();
+            UpdateScore();
         }
 
         private void SetHighScore(float score) {
@@ -78,7 +90,7 @@ namespace Game {
             levels.LoadStartScene();
         }
 
-        private void UpdateKillsDisplay() {
+        public void UpdateScore() {
             if(!killsText) {
                 //may need to find kills text because this is a persistent singleton.
                 GameObject go = GameObject.FindGameObjectWithTag("Kills Text");

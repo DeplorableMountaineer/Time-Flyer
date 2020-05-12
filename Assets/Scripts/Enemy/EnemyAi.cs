@@ -69,6 +69,16 @@ namespace Enemy {
             _collider = GetComponent<Collider2D>();
             _movingBody = GetComponent<MovingBody>();
             _transform = transform;
+            if(Game.Game.Instance.EasyMode) {
+                maxSpeed /= 2;
+                fleeSpeed /= 2;
+                flockSpeed /= 2;
+                missileSpeed /= 2;
+                attackRange /= 2;
+                damagePerShot /= 2;
+                minTimeBetweenShots *= 2;
+            }
+
             FindPlayer();
         }
 
@@ -78,6 +88,7 @@ namespace Enemy {
             switch(_aiMode) {
                 case AiMode.Wander:
                     _targetSpeed = maxSpeed;
+                    if(_targetDistance > maxDistanceFromTarget) _aiMode = AiMode.Seek;
                     Wander();
                     break;
                 case AiMode.Seek:
@@ -92,6 +103,9 @@ namespace Enemy {
                     break;
                 case AiMode.Flock:
                     _targetSpeed = flockSpeed;
+
+                    //prevent wayward enemies from just flying away
+                    if(_targetDistance > maxDistanceFromTarget*2) _aiMode = AiMode.Seek;
                     Flock();
                     break;
                 default:

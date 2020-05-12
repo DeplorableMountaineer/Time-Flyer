@@ -9,6 +9,7 @@ namespace Weapons {
         private bool _isLaunched = false;
         private bool _isEnemyMissile = false;
         private float _damage;
+        private bool _alreadyHitSomethingElse = false;
 
         private void Awake() {
             _rigidbody = GetComponent<Rigidbody2D>();
@@ -24,11 +25,12 @@ namespace Weapons {
         }
 
         private void OnTriggerEnter2D(Collider2D other) {
-            if(!_isLaunched) return;
+            if(!_isLaunched || _alreadyHitSomethingElse) return;
             if(other == _spawner || other.transform == transform) return; //do not shoot self
             if(_isEnemyMissile && !other.CompareTag("Player")) return; //do not shoot teammates
             Health health = other.GetComponent<Health>();
             if(health) health.TakeDamage(_damage);
+            _alreadyHitSomethingElse = true;
             Destroy(gameObject);
         }
     }

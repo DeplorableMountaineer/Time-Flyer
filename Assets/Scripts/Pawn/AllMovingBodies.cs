@@ -8,12 +8,14 @@ namespace Pawn {
 
         [SerializeField] private float radius = .5f;
 
+        public HashSet<Rigidbody2D> Bodies => _bodies;
+
         public void OnSpawn(Rigidbody2D rb) {
-            _bodies.Add(rb);
+            Bodies.Add(rb);
         }
 
         public void OnDeath(Rigidbody2D rb) {
-            _bodies.Remove(rb);
+            Bodies.Remove(rb);
         }
 
         public Rigidbody2D FindLikeliestCollision(Rigidbody2D self, float collisionAvoidanceThreshold,
@@ -24,7 +26,7 @@ namespace Pawn {
             float firstDistance = 0;
             Vector2 firstRelativePos = default;
             Vector2 firstRelativeVel = default;
-            foreach(Rigidbody2D rb in _bodies.Where(rb => rb != self)) {
+            foreach(Rigidbody2D rb in Bodies.Where(rb => rb != self)) {
                 avoidanceDirection = rb.position - self.position;
                 float distance = avoidanceDirection.magnitude;
                 if(distance > collisionAvoidanceThreshold) continue;

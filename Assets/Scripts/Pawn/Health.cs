@@ -14,8 +14,10 @@ namespace Pawn {
         [SerializeField] private ParticleSystem flames = null;
         [SerializeField] private TextMeshProUGUI displayText = null;
 
+        public float HealthPercentage => _health/maxHealth;
+
         public void TakeDamage(float amount) {
-            _health -= amount;
+            _health = _health - amount;
             if(_health < 0) Die();
             UpdateDisplay();
             enabled = _health < maxHealth;
@@ -40,6 +42,10 @@ namespace Pawn {
 
         private void Awake() {
             _enemySelf = GetComponent<EnemyAi>();
+            if(!Game.Game.Instance.EasyMode || !CompareTag("Player")) return;
+            startingHealth *= 2;
+            maxHealth *= 2;
+            healingRate *= 2;
         }
 
         private void Start() {

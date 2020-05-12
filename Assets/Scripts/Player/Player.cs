@@ -8,6 +8,11 @@ namespace Player {
         private float _lastShotTime = 0;
         private Transform _transform;
 
+        public bool AutopilotFire { get; set; } = false;
+        public float AutopilotRotate { get; set; } = 0;
+        public Vector2 AutopilotMotion { get; set; } = default;
+
+        public float AttackRange => attackRange;
 
         [SerializeField] private float maxBackwardAcceleration = 1;
         [SerializeField] private float maxForwardAcceleration = 20;
@@ -23,15 +28,44 @@ namespace Player {
         private void Awake() {
             _rigidbody = GetComponent<Rigidbody2D>();
             _transform = transform;
+            Game.Game.Instance.UpdateScore();
+
+            if(Game.Game.Instance.CurrentLevel > 5) { //ship gets better on higher levels
+                float multiplier = Mathf.Pow(Game.Game.Instance.CurrentLevel - 5, .25f);
+                missileSpeed *= multiplier;
+                attackRange *= multiplier;
+                damagePerShot *= multiplier;
+                minTimeBetweenShots /= multiplier;
+                maxSpeed *= multiplier;
+            }
+
+            if(!Game.Game.Instance.EasyMode) return;
+            missileSpeed *= 2;
+            attackRange *= 2;
+            damagePerShot *= 2;
+            minTimeBetweenShots /= 2;
         }
 
         private void Update() {
+            /*if(Game.Game.Instance.EasyMode) {
+                Rotate(-rotationRate*AutopilotRotate);
+                if(AutopilotFire) Fire();
+                AutopilotFire = false;
+                return;
+            }*/
+
             Rotate(-rotationRate*Input.GetAxis("Rotate"));
             if(Input.GetButton("Fire1")) Fire();
         }
 
         private void FixedUpdate() {
             Vector2 motion = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
+            /*
+            if(Game.Game.Instance.EasyMode) {
+                motion = AutopilotMotion;
+            }
+            */
+
             if(motion.magnitude < 1) {
                 _rigidbody.velocity /= 2;
             }
@@ -58,13 +92,17 @@ namespace Player {
             _rigidbody.rotation += rate*Time.smoothDeltaTime;
         }
 
+        public bool ReadyToFire() {
+            return Time.time - _lastShotTime >= minTimeBetweenShots;
+        }
+
         private void Fire() {
-            if(Time.time - _lastShotTime < minTimeBetweenShots) return;
+            if(!ReadyToFire()) return;
             _lastShotTime = Time.time;
             GameObject projectile = Instantiate(missilePrefab, _transform.position, _transform.rotation);
             Missile missile = projectile.GetComponent<Missile>();
             if(!missile) return;
-            missile.Launch(attackRange, missileSpeed, gameObject, damagePerShot);
+            missile.Launch(AttackRange, missileSpeed, gameObject, damagePerShot);
         }
     }
 }

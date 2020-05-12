@@ -13,10 +13,12 @@ namespace Enemy {
         [SerializeField] private FlockData[] flockData = null;
         [SerializeField] private TextMeshProUGUI formationsText = null;
 
+        public List<GameObject> Flocks => _flocks;
+
         public void OnDeath(GameObject go) {
-            _flocks.Remove(go);
+            Flocks.Remove(go);
             UpdateDisplay();
-            if(_flocks.Count != 0) return;
+            if(Flocks.Count != 0) return;
             Game.Game.Instance.AddToScore(50);
             if(!this) return;
             Destroy(gameObject);
@@ -30,14 +32,18 @@ namespace Enemy {
 
         private void UpdateDisplay() {
             if(!formationsText) return;
-            formationsText.text = (_flocks.Count - (_flocks.Count > 0 && _flocks[0] == null ? 1 : 0)).ToString();
+            formationsText.text = (Flocks.Count - (Flocks.Count > 0 && Flocks[0] == null ? 1 : 0)).ToString();
         }
 
         private void SpawnNext(GameObject go) {
-            _flocks.Add(go);
+            if(Flocks.Count > 0 && !go) { //a failed spawn
+                _toSpawn = flockData.Length + 1;
+            }
+            else Flocks.Add(go);
+
             UpdateDisplay();
             if(flockData == null || _toSpawn >= flockData.Length) {
-                if(_flocks[0] == null) _flocks.RemoveAt(0);
+                if(Flocks[0] == null) Flocks.RemoveAt(0);
                 return;
             }
 
@@ -58,9 +64,16 @@ namespace Enemy {
         [SerializeField] private float delayBeforeSpawn = 0;
 
         public IEnumerator SpawnFlockInBackground(Wave wave, Action<GameObject> onCompletion) {
-            yield return new WaitForSeconds(delayBeforeSpawn);
+            yield return new WaitForSeconds(
+                Game.Game.Instance.CurrentLevel > 10 ? delayBeforeSpawn/3 : delayBeforeSpawn);
             GameObject go = Object.Instantiate(flockPrefab, startPosition,
                 Quaternion.Euler(0, 0, startRotation));
+            if(!go) {
+                Debug.Log("Failed to spawn flock");
+                onCompletion?.Invoke(null);
+                yield break;
+            }
+
             Flock flock = go.GetComponent<Flock>();
             if(flock) flock.SetWave(wave);
             onCompletion?.Invoke(go);
