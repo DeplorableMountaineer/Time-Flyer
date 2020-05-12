@@ -46,5 +46,5 @@ MonoBehaviour:
   numShips: 5
   leaderPrefab: {fileID: 942511088414957593, guid: 7c0d77b21cd2f0b4698f4ed85d9425e8,
     type: 3}
-  supportPrefab: {fileID: 942511088414957593, guid: 8e38a33f010dca941a471b69722e7c88,
+  supportPrefab: {fileID: 942511088414957593, guid: 521b24f37b2aafe4eabbf46a269b47e5,
     type: 3}

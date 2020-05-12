@@ -7,7 +7,7 @@ namespace Game {
         private const string HighScore = "High Score";
 
         private int _score = 0;
-        private int _currentLevel = -1;
+        public int CurrentLevel { get; private set; } = -1;
 
         [SerializeField] private TextMeshProUGUI killsText = null;
         [SerializeField] private Levels levels = null;
@@ -23,21 +23,21 @@ namespace Game {
         public void GameOver() {
             float highScore = GetHighScore();
             if(_score > highScore) SetHighScore(_score);
-            _currentLevel = -1;
+            CurrentLevel = -1;
             _score = 0;
             Invoke(nameof(LoadStartScene), 5);
         }
 
 
         public void FirstScene() {
-            _currentLevel = 0;
+            CurrentLevel = 0;
             _score = 0;
-            levels.LoadLevel(_currentLevel);
+            levels.LoadLevel(CurrentLevel);
         }
 
         public void NextScene() {
-            _currentLevel++;
-            levels.LoadLevel(_currentLevel);
+            CurrentLevel++;
+            levels.LoadLevel(CurrentLevel);
         }
 
         public void AddToScore(int amount) {

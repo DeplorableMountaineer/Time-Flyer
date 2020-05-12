@@ -13,7 +13,8 @@ namespace Game {
                 if(text) text.text = timeZome;
             }
 
-            Time.timeScale = timeScale;
+            if(Game.Instance.CurrentLevel < 11) Time.timeScale = timeScale;
+            else Time.timeScale = timeScale*Mathf.Ceil(Game.Instance.CurrentLevel/10f);
         }
     }
 }
