@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a74f6a6acecc6e140ada60959de6a62b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeZome: 23200
+  timeZone: 22000
   timeScale: 1.5
 --- !u!20 &519420031 stripped
 Camera:
