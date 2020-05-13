@@ -2,6 +2,9 @@
 using UnityEngine;
 
 namespace UI {
+    /**
+     * Show high score on title screen
+     */
     public class HighScore : MonoBehaviour {
         void Start() {
             float score = Game.Game.Instance.GetHighScore();

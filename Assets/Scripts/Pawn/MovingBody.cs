@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
 
 namespace Pawn {
+    /**
+     * A player, enemy, or missile
+     */
     [RequireComponent(typeof(Rigidbody2D)), DisallowMultipleComponent]
     public class MovingBody : MonoBehaviour {
         private Rigidbody2D _rigidbody;
         private AllMovingBodies _allMovingBodies;
 
+        /**
+         * Search all moving bodies to find one this one will likely collide with
+         */
         public Rigidbody2D FindLikeliestCollision(float collisionAvoidanceThreshold, out Vector2 avoidanceDirection) {
             avoidanceDirection = default;
             return !_allMovingBodies

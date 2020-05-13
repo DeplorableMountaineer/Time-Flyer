@@ -2,7 +2,8 @@
 
 namespace Background {
     /**
-     * Move object with the camera, but do not rotate with camera.  This allows a background to simulate an
+     * Move the background image with the camera, but do not rotate it with camera.
+     * This allows a background to appear to be an
      * infinite-distance background to simulate parallax.
      */
     public class FollowCamera : MonoBehaviour {

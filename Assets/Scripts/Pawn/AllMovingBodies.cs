@@ -3,6 +3,9 @@ using System.Linq;
 using UnityEngine;
 
 namespace Pawn {
+    /**
+     * Keeps track of all moving bodies: player, enemies, missiles
+     */
     public class AllMovingBodies : MonoBehaviour {
         private readonly HashSet<Rigidbody2D> _bodies = new HashSet<Rigidbody2D>();
 
@@ -10,14 +13,24 @@ namespace Pawn {
 
         public HashSet<Rigidbody2D> Bodies => _bodies;
 
+        /**
+         * Add new body to list; called by MovingBody component.
+         */
         public void OnSpawn(Rigidbody2D rb) {
             Bodies.Add(rb);
         }
 
+        /**
+         * Remove destroyed body from list; called by MovingBody component
+         */
         public void OnDeath(Rigidbody2D rb) {
             Bodies.Remove(rb);
         }
 
+        /**
+         * Determine next body that self will likely collide with, with linear prediction.
+         * In addition to returning the rigid body, returns direction to accelerate to prevent the collision
+         */
         public Rigidbody2D FindLikeliestCollision(Rigidbody2D self, float collisionAvoidanceThreshold,
             out Vector2 avoidanceDirection) {
             avoidanceDirection = default;

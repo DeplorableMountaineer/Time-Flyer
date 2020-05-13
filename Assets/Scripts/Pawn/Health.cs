@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 
 namespace Pawn {
+    /**
+     * Manages damage, health, and death of player or enemy
+     */
     public class Health : MonoBehaviour {
         private float _health;
         private EnemyAi _enemySelf;
@@ -18,6 +21,11 @@ namespace Pawn {
 
         public float HealthPercentage => _health/maxHealth;
 
+        /**
+         * Apply specified damage to pawn, update health display if player, set
+         * particle effects properties based on health (flames for damage), and die if no more
+         * health.
+         */
         public void TakeDamage(float amount) {
             _health = _health - amount;
             if(_health < 0) {
@@ -33,6 +41,9 @@ namespace Pawn {
             if(_enemySelf) _enemySelf.OnHit();
         }
 
+        /**
+         * Called by TakeDamage when pawn r4uns out of health.
+         */
         public void Die() {
             _health = 0;
             UpdateDisplay();
@@ -86,11 +97,17 @@ namespace Pawn {
             UpdateDisplay();
         }
 
+        /**
+         * for player only: update health display in UI
+         */
         private void UpdateDisplay() {
             if(!displayText) return;
             displayText.text = Mathf.Floor(_health).ToString(CultureInfo.InvariantCulture);
         }
 
+        /**
+         * Set particle effect according to current health
+         */
         private void SetFlameProperties() {
             if(!flames) return;
             if(!enabled) {

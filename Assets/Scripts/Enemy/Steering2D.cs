@@ -209,6 +209,9 @@ namespace Enemy {
             _rigidbody = GetComponent<Rigidbody2D>();
         }
 
+        /**
+         * Binomial distribution, close to normal (with a peak at 0) but quicker to compute
+         */
         private static float RandomBinomial() {
             return Random.value - Random.value;
         }

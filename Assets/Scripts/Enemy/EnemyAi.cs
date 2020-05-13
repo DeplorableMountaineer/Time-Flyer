@@ -5,6 +5,9 @@ using Weapons;
 using Random = UnityEngine.Random;
 
 namespace Enemy {
+    /**
+     * Enemy movement and AI goes here
+     */
     [RequireComponent(typeof(Steering2D), typeof(MovingBody)),
      DisallowMultipleComponent]
     public class EnemyAi : MonoBehaviour {
@@ -28,36 +31,56 @@ namespace Enemy {
         [SerializeField] private float maxAcceleration = 5;
         [SerializeField] private float maxSpeed = 3;
         [SerializeField] private float fleeSpeed = 6;
+        [Tooltip("A little faster than 'maxSpeed' to allow it to catch up with the leader")]
         [SerializeField] private float flockSpeed = 6;
         [SerializeField] private float rotationRate = 180;
         [SerializeField] private float missileSpeed = 8;
         [SerializeField] private float attackRange = 8;
+        [Tooltip("If seeking and gets closer than this, switches to fleeing")]
         [SerializeField] private float minDistanceFromTarget = 3;
+        [Tooltip("If fleeing and gets farther than this, switches to seeking")]
         [SerializeField] private float maxDistanceFromTarget = 7;
         [SerializeField] private float minTimeBetweenShots = 1f;
         [SerializeField] private GameObject missilePrefab = null;
         [SerializeField] private float damagePerShot = 30;
+        [Tooltip("bigger numbers mean more acceleration to separate from other flock members")]
         [SerializeField] private float separationStrength = 10;
+        [Tooltip("Start pushing apart if closer than this")]
         [SerializeField] private float separationThreshold = 4;
+        [Tooltip("Try to pull together to this distance from others in flock")]
         [SerializeField] private float cohesionTargetRadius = 3;
+        [Tooltip("Slow down moving toward flock when this close")]
         [SerializeField] private float cohesionSlowRadius = 6;
+        [Tooltip("If closer than this, check for impending collision")]
         [SerializeField] private float collisionAvoidanceThreshold = 2;
 
+        /**
+         * Called on spawning as leader or when leader dies and this enemy is promoted to leader
+         */
         public void SetAsLeader(Flock flock) {
             _aiMode = AiMode.Seek;
             _flock = flock;
             _isLeader = true;
         }
 
+        /**
+         * Called on enemies not being made leader
+         */
         public void SetAsFlock(Flock flock) {
             _aiMode = AiMode.Flock;
             _flock = flock;
         }
 
+        /**
+         * Call this when hit to make enemy break from flock and flee to have time to heal
+         */
         public void OnHit() {
             if(_target) _aiMode = AiMode.Flee;
         }
 
+        /**
+         * Call when health is restored so enemy can rejoin flock
+         */
         public void OnHealthRestored() {
             if(!_isLeader) _aiMode = AiMode.Flock;
         }
@@ -69,7 +92,7 @@ namespace Enemy {
             _collider = GetComponent<Collider2D>();
             _movingBody = GetComponent<MovingBody>();
             _transform = transform;
-            if(Game.Game.Instance.EasyMode) {
+            if(Game.Game.Instance.EasyMode) {//easy mode is for testing
                 maxSpeed /= 2;
                 fleeSpeed /= 2;
                 flockSpeed /= 2;
@@ -79,12 +102,15 @@ namespace Enemy {
                 minTimeBetweenShots *= 2;
             }
 
-            FindPlayer();
+            FindPlayer();//find the player entity and target it
         }
 
         private void FixedUpdate() {
-            if(!_target) OnTargetLost();
-            MaybeAttack();
+            if(!_target) OnTargetLost();//in case target is lost for some reason
+            MaybeAttack();//check if in range and has a clear shot
+            
+            
+            //main AI
             switch(_aiMode) {
                 case AiMode.Wander:
                     _targetSpeed = maxSpeed;
@@ -104,7 +130,7 @@ namespace Enemy {
                 case AiMode.Flock:
                     _targetSpeed = flockSpeed;
 
-                    //prevent wayward enemies from just flying away
+                    //prevent wayward enemies from just flying away...this happened sometimes
                     if(_targetDistance > maxDistanceFromTarget*2) _aiMode = AiMode.Seek;
                     Flock();
                     break;
@@ -113,10 +139,12 @@ namespace Enemy {
             }
         }
 
+        //when destroyed, notify flock
         private void OnDestroy() {
             _flock.RemoveMember(_rigidbody);
         }
-
+        
+        //fire a missile if ready to fire
         private void Fire() {
             if(Time.time - _lastShotTime < minTimeBetweenShots) return;
             _lastShotTime = Time.time;
@@ -128,8 +156,10 @@ namespace Enemy {
 
         private void OnTargetLost() {
             if(_aiMode == AiMode.Wander) return;
+            //try to find the player again
             FindPlayer();
             if(_target) return;
+            //if all else fails, just wander around (e.g. player may be dead)
             if(_aiMode != AiMode.Flock) _aiMode = AiMode.Wander;
         }
 
@@ -141,7 +171,7 @@ namespace Enemy {
                 FaceMovement();
                 return;
             }
-
+            
             _targetDelta = _target.position - _rigidbody.position;
             _targetDistance = _targetDelta.magnitude;
             if(_targetDistance > attackRange) {
@@ -171,6 +201,9 @@ namespace Enemy {
             Fire();
         }
 
+        /**
+         * Face direction ship is moving
+         */
         private void FaceMovement() {
             Vector2 direction = _rigidbody.velocity;
             float orientation = _steering.Face(direction);
@@ -178,17 +211,27 @@ namespace Enemy {
                 1, 5);
         }
 
+        /**
+         * Aim ship at target to shoot
+         */
         private void FaceTarget() {
             float orientation = _steering.Face(_targetDelta);
             _steering.Align(orientation, rotationRate,
                 1, 5);
         }
 
+        /**
+         * Add acceleration to prevent an impending collision
+         */
         private void AvoidCollision() {
             Rigidbody2D rb = _movingBody.FindLikeliestCollision(collisionAvoidanceThreshold, out Vector2 direction);
             if(rb) _steering.UpdateSteering(direction*maxAcceleration, fleeSpeed);
         }
 
+        /**
+         * Move toward player, with some linear prediction of player's motion
+         * _simpletarget is a fallback if for some reason target is missing its rigidbody
+         */
         private void Seek() {
             AvoidCollision();
             Vector2 acceleration;
@@ -199,6 +242,9 @@ namespace Enemy {
             _steering.UpdateSteering(acceleration, _targetSpeed);
         }
 
+        /**
+         * Move away from player, taking into account direction player is moving
+         */
         private void Flee() {
             AvoidCollision();
             Vector2 acceleration;
@@ -209,6 +255,11 @@ namespace Enemy {
             _steering.UpdateSteering(acceleration, _targetSpeed);
         }
 
+        /**
+         * Flocking consists of: separation from flock members, cohesion with flock, matching velocity with
+         * the center of mass of the flock, and collision avoidance.  Leader does not use this, but
+         * goes on its own, seeking and fleeing.  This pulls the flock with it.
+         */
         private void Flock() {
             if(_flock == null) {
                 _aiMode = AiMode.Seek;
@@ -226,6 +277,9 @@ namespace Enemy {
             _steering.UpdateSteering(acceleration, _targetSpeed);
         }
 
+        /**
+         *  Just wander around
+         */
         private void Wander() {
             AvoidCollision();
             Vector2 acceleration = _steering.Wander(3, 2, 45,
@@ -234,6 +288,9 @@ namespace Enemy {
         }
 
 
+        /**
+         * Find the player object, with several fallbacks.
+         */
         private void FindPlayer() {
             GameObject obj = GameObject.FindGameObjectWithTag("Player");
             if(obj) _target = obj.GetComponent<Rigidbody2D>();

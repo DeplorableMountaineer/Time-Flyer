@@ -2,15 +2,14 @@
 using Weapons;
 
 namespace Player {
+    /**
+     * The player ship pawn
+     */
     [RequireComponent(typeof(Rigidbody2D))] [DisallowMultipleComponent]
     public class Player : MonoBehaviour {
         private Rigidbody2D _rigidbody;
         private float _lastShotTime = 0;
         private Transform _transform;
-
-        public bool AutopilotFire { get; set; } = false;
-        public float AutopilotRotate { get; set; } = 0;
-        public Vector2 AutopilotMotion { get; set; } = default;
 
         public float AttackRange => attackRange;
 
@@ -75,6 +74,9 @@ namespace Player {
             }
         }
 
+        /**
+         * Accelerate to target velocity
+         */
         private void Move(Vector2 targetVelocity) {
             Vector3 delta = (targetVelocity - _rigidbody.velocity)/Time.smoothDeltaTime;
             float orientation = Mathf.Atan2(targetVelocity.y, targetVelocity.x)*Mathf.Rad2Deg;
@@ -88,14 +90,23 @@ namespace Player {
             _rigidbody.AddForce(delta/_rigidbody.mass, ForceMode2D.Force);
         }
 
+        /**
+         * Rotate at the given rate
+         */
         private void Rotate(float rate) {
             _rigidbody.rotation += rate*Time.smoothDeltaTime;
         }
 
+        /**
+         * True when ship is ready to fire (enough time elapsed to "reload")
+         */
         public bool ReadyToFire() {
             return Time.time - _lastShotTime >= minTimeBetweenShots;
         }
 
+        /**
+         * Fire a missile if ready
+         */
         private void Fire() {
             if(!ReadyToFire()) return;
             _lastShotTime = Time.time;

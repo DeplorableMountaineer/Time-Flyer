@@ -2,6 +2,9 @@
 using UnityEngine;
 
 namespace Weapons {
+    /**
+     * A missile fired by the player or an enemy
+     */
     [RequireComponent(typeof(Rigidbody2D))] [DisallowMultipleComponent]
     public class Missile : MonoBehaviour {
         private Rigidbody2D _rigidbody;
@@ -15,6 +18,9 @@ namespace Weapons {
             _rigidbody = GetComponent<Rigidbody2D>();
         }
 
+        /**
+         * Launch the missile
+         */
         public void Launch(float range, float speed, GameObject spawner, float damage, bool isEnemyMissile = false) {
             _spawner = spawner.GetComponent<Collider2D>();
             Destroy(gameObject, range/speed);
@@ -24,6 +30,9 @@ namespace Weapons {
             _damage = damage;
         }
 
+        /**
+         * Destroy missile and hit pawn if appropriate
+         */
         private void OnTriggerEnter2D(Collider2D other) {
             if(!_isLaunched || _alreadyHitSomethingElse) return;
             if(other == _spawner || other.transform == transform) return; //do not shoot self
