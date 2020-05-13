@@ -1,7 +1,7 @@
 # Time-Flyer
 ### Time heals all wounds!  Fly through time, evade when hurt to heal
 
-
+![Image of Space Ship](https://github.com/DeplorableMountaineer/Time-Flyer/blob/master/Assets/2D%20Space%20Kit/Ships%20and%20Stations/Cruiser%203.png)
 
 A 2D arcade-style top-down space shooter
 
