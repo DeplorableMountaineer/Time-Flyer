@@ -60,7 +60,7 @@ namespace Game {
             }
 
             CurrentLevel++;
-            Invoke(nameof(LoadTheLevel), 2);
+            Invoke(nameof(LoadTheLevel), 5);
         }
 
         /**
