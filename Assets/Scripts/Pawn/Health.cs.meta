@@ -1,3 +1,15 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: cd9b4dd9c2bc4f40a21b902cff2745f6
-timeCreated: 1588628076
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - flames: {instanceID: 0}
+  - displayText: {instanceID: 0}
+  - deathSound: {fileID: 8300000, guid: b761d8acf3ab9774c99b6dd19371daf9, type: 3}
+  - hitSound: {fileID: 8300000, guid: 8421d2f472820a2458660aa80cf70358, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

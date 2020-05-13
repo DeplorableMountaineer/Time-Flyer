@@ -12,7 +12,6 @@ namespace Enemy {
 
         [SerializeField] private FlockData[] flockData = null;
         [SerializeField] private TextMeshProUGUI formationsText = null;
-
         public List<GameObject> Flocks => _flocks;
 
         public void OnDeath(GameObject go) {

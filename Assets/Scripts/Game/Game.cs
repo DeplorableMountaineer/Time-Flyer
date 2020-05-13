@@ -2,12 +2,6 @@
 using UnityEngine;
 using Utilities;
 
-//TODO sound effects
-//TODO time tunnel effect between levels
-//TODO enemy spawn effect
-//TODO fix one shot killing multiple enemies
-//TODO randomization of later levels
-//TODO fix score showing 0 at beginning of new levels
 namespace Game {
     public class Game : Singleton<Game> {
         private const string HighScore = "High Score";
@@ -17,6 +11,7 @@ namespace Game {
 
         [SerializeField] private TextMeshProUGUI killsText = null;
         [SerializeField] private Levels levels = null;
+        [SerializeField] private GameObject warpEffectPrefab = null;
         [SerializeField, Tooltip("For testing; only works in editor")]
         private bool easyMode = false;
 
@@ -46,7 +41,17 @@ namespace Game {
         }
 
         public void NextScene() {
+            Player.Player player = FindObjectOfType<Player.Player>();
+            if(player) {
+                Instantiate(warpEffectPrefab, player.transform.position,
+                    Quaternion.Euler(-90, 0, 0));
+            }
+
             CurrentLevel++;
+            Invoke(nameof(LoadTheLevel), 2);
+        }
+
+        private void LoadTheLevel() {
             levels.LoadLevel(CurrentLevel);
         }
 

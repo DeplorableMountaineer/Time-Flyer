@@ -13,12 +13,20 @@ namespace Pawn {
         [SerializeField] private float healingRate = 10;
         [SerializeField] private ParticleSystem flames = null;
         [SerializeField] private TextMeshProUGUI displayText = null;
+        [SerializeField] private AudioClip deathSound = null;
+        [SerializeField] private AudioClip hitSound = null;
 
         public float HealthPercentage => _health/maxHealth;
 
         public void TakeDamage(float amount) {
             _health = _health - amount;
-            if(_health < 0) Die();
+            if(_health < 0) {
+                Die();
+                return;
+            }
+
+            if(Camera.main != null && hitSound)
+                AudioSource.PlayClipAtPoint(hitSound, Camera.main.transform.position, .5f);
             UpdateDisplay();
             enabled = _health < maxHealth;
             SetFlameProperties();
@@ -37,6 +45,8 @@ namespace Pawn {
                 if(CompareTag("Player")) Game.Game.Instance.GameOver();
             }
 
+            if(Camera.main != null && deathSound)
+                AudioSource.PlayClipAtPoint(deathSound, Camera.main.transform.position, .5f);
             Destroy(gameObject);
         }
 

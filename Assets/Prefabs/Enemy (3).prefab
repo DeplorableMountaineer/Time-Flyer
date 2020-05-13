@@ -194,6 +194,8 @@ MonoBehaviour:
   healingRate: 10
   flames: {fileID: 188507420411938806}
   displayText: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: b761d8acf3ab9774c99b6dd19371daf9, type: 3}
+  hitSound: {fileID: 8300000, guid: 8421d2f472820a2458660aa80cf70358, type: 3}
 --- !u!114 &2877156396724396848
 MonoBehaviour:
   m_ObjectHideFlags: 0

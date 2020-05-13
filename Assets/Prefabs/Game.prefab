@@ -45,3 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   killsText: {fileID: 0}
   levels: {fileID: 11400000, guid: 0fe67005b9a416f4497beff041bef000, type: 2}
+  warpEffectPrefab: {fileID: 1048922466365396041, guid: 5bcd0ec69cd3b4f4bad6c794781ae426,
+    type: 3}
+  easyMode: 0

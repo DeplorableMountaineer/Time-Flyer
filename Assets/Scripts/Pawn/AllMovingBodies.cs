@@ -20,6 +20,7 @@ namespace Pawn {
 
         public Rigidbody2D FindLikeliestCollision(Rigidbody2D self, float collisionAvoidanceThreshold,
             out Vector2 avoidanceDirection) {
+            avoidanceDirection = default;
             float shortestTime = Mathf.Infinity;
             Rigidbody2D firstTarget = null;
             float firstMinSeparation = 0;
@@ -56,6 +57,14 @@ namespace Pawn {
             //if already colliding, separate from current position, else separate from predicted position
             if(firstMinSeparation <= 0 || firstDistance < 2*radius) avoidanceDirection = firstRelativePos.normalized;
             else avoidanceDirection = (firstRelativePos + firstRelativeVel*shortestTime).normalized;
+
+            if(Mathf.Abs(avoidanceDirection.magnitude - 1) > .0001f &&
+               avoidanceDirection.magnitude > .0001f) {
+                Debug.Log("Bad direction: " + avoidanceDirection);
+                avoidanceDirection = default;
+                return null;
+            }
+
             return firstTarget;
         }
     }
