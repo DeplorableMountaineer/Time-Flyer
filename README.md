@@ -2,7 +2,6 @@
 ### Time heals all wounds!  Fly through time, evade when hurt to heal
 
 
-Play for free here: https://deplorablemountaineer.itch.io/
 
 A 2D arcade-style top-down space shooter
 
